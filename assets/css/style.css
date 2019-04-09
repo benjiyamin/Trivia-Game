@@ -1,0 +1,12 @@
+#trivia {
+    display: none
+}
+
+#end {
+    display: none
+}
+
+.result-alert {
+    margin-bottom: 0;
+    padding: 0 1.25rem;
+}
