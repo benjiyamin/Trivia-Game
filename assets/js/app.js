@@ -94,6 +94,20 @@ function Game(questionBank) {
     return score
   }
 
+  this.unanswered = function() {
+    let unanswered = 0
+    this.results.forEach(result => {
+      if (!result.guess) {
+        unanswered++
+      }
+    });
+    return unanswered
+  }
+
+  this.incorrect = function () {
+    return this.score() - this.unanswered()
+  }
+
   this.correctAnswer = function (question) {
     for (let i = 0; i < question.answers.length; i++) {
       const answer = question.answers[i];

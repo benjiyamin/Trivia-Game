@@ -1,9 +1,37 @@
+/*
+#start {
+    display: none
+}
+*/
+
 #trivia {
     display: none
 }
 
 #end {
     display: none
+}
+
+.bg-gauntlet {
+    background-color: #ababdd;
+}
+
+.bg-space {
+    background-color: #202020;
+    /*background: #202020 url("../images/background-poster.png") no-repeat center top;*/
+}
+
+#gauntletWrapper {
+    position: relative;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.img-stone {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 .result-alert {
