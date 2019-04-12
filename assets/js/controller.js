@@ -1,5 +1,7 @@
 function Controller(model, view) {
   const self = this
+  this.timeBetweenRounds = undefined
+  this.interval = undefined
 
   this.updateQuestion = function () {
     $('#question', view).text(
@@ -26,8 +28,8 @@ function Controller(model, view) {
               .append(' <i class="fas fa-times"></i>')
           }
           model.guess(answer)
+          self.endRound()
           if (!model.gameOver()) {
-            //self.updateQuestion()
             self.updateTime()
           } else {
             self.endGame()
@@ -56,16 +58,17 @@ function Controller(model, view) {
     }
   }
 
-  this.startGame = function () {
+  this.startGame = function (timeBetweenRounds = 2) {
+    this.timeBetweenRounds = timeBetweenRounds
     this.updateQuestion()
     this.updateTime()
     $('#start').hide()
     $('#trivia').show()
     $('#end').hide()
+    this.startRound()
   }
 
   this.endGame = function () {
-    //$('#score').text(model.score())
     this.showStones()
     let $results = $('#results', view)
     $results.empty()
@@ -82,7 +85,6 @@ function Controller(model, view) {
           .text(answerText)
         if (answer.isCorrect) {
           answerDiv.append(' <i class="fas fa-check"></i>')
-          //answerText += ' <i class="fas fa-check"></i>'
         }
         if (answer === result.guess) {
           if (answer.isCorrect) {
@@ -122,7 +124,7 @@ function Controller(model, view) {
     if (count >= 6) this.addStone('assets/images/stone-yellow.png')
   }
 
-  view.addEventListener('timeChange', function () {
+  this.onTimeChange = function () {
     if (!model.gameOver()) {
       if (model.time === model.timePerQuestion) {
         self.updateQuestion()
@@ -131,10 +133,42 @@ function Controller(model, view) {
     } else {
       self.endGame()
     }
-  });
+  }
+
+  this.startRound = function () {
+    model.startRound()
+    this.onTimeChange()
+    clearInterval(this.inverval)
+    this.inverval = setInterval(this.deincrementTime.bind(this), 1000) // Start the timer
+  }
+
+
+  this.deincrementTime = function () {
+    model.deincrementTime()
+    this.onTimeChange()
+    if (model.time <= 0) {
+      model.guess()
+      this.endRound()
+    }
+  }
+
+  this.endRound = function () {
+    clearTimeout(this.inverval)
+    this.inverval = setTimeout(this.nextRound.bind(this), 1000 * this.timeBetweenRounds) // Start the timer
+  }
+
+  this.nextRound = function () {
+    if (!model.currentQuestionLast()) { // Round is over
+      model.nextQuestion()
+      this.startRound()
+    } else { // Game is over
+      clearInterval(this.inverval)
+    }
+  }
 
   $('.start-btn', view).on('click', function () {
     model.startGame()
     self.startGame()
   })
+
 }

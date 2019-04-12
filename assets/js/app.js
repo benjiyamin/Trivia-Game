@@ -17,20 +17,15 @@ function Game(questionBank) {
   this.questions = []
   this.questionCount = undefined
   this.timePerQuestion = undefined
-  this.interval = undefined
+  this.timeBetweenRounds = undefined
   this.time = undefined
   this.currentQuestion = undefined
   this.results = []
 
-  var event = new CustomEvent('timeChange', {
-    'detail': 'Trivia time is updated'
-  });
-
-  this.startGame = function (questionCount = 10, timePerQuestion = 10, timeBetweenRounds = 2) {
+  this.startGame = function (questionCount = 10, timePerQuestion = 10) {
     if (questionCount <= questionBank.length) {
       this.questionCount = questionCount
       this.timePerQuestion = timePerQuestion
-      this.timeBetweenRounds = timeBetweenRounds
       shuffle(this.questionBank)
       this.questions = this.questionBank.slice(0, questionCount) // Select # of random questions from the bank
       this.results = [] // Reset the results
@@ -43,31 +38,10 @@ function Game(questionBank) {
 
   this.startRound = function () {
     this.time = this.timePerQuestion // Reset the time
-    document.dispatchEvent(event);
-    clearInterval(this.inverval)
-    this.inverval = setInterval(this.deincrementTime.bind(this), 1000) // Start the timer
-  }
-
-  this.endRound = function() {
-    clearTimeout(this.inverval)
-    this.inverval = setTimeout(this.nextRound.bind(this), 1000 * this.timeBetweenRounds) // Start the timer
-  }
-
-  this.nextRound = function() {
-    if (!this.currentQuestionLast()) { // Round is over
-      this.nextQuestion()
-      this.startRound()
-    } else { // Game is over
-      this.endGame()
-    }
   }
 
   this.deincrementTime = function () {
     this.time--
-    document.dispatchEvent(event);
-    if (this.time <= 0) {
-      this.guess()
-    }
   }
 
   this.guess = function (guess) {
@@ -81,7 +55,6 @@ function Game(questionBank) {
       question: this.currentQuestion
     }
     this.results.push(result)
-    this.endRound()
   }
 
   this.score = function () {
@@ -139,12 +112,7 @@ function Game(questionBank) {
     return this.questions.indexOf(model.currentQuestion) + 1
   }
 
-  this.endGame = function () {
-    document.dispatchEvent(event);
-    clearInterval(this.inverval)
-  }
-
   this.gameOver = function () {
-    return this.results.length === this.questions.length && !this.interval
+    return this.results.length === this.questions.length
   }
 }
