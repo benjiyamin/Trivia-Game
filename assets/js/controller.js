@@ -157,6 +157,7 @@ function Controller(model, view) {
   this.endRound = function () {
     clearTimeout(this.inverval)
     this.inverval = setTimeout(this.nextRound.bind(this), 1000 * this.timeBetweenRounds) // Start the timer
+    //this.onTimeChange()
   }
 
   this.nextRound = function () {
@@ -165,6 +166,7 @@ function Controller(model, view) {
       this.startRound()
     } else { // Game is over
       clearInterval(this.inverval)
+      this.onTimeChange()
     }
   }
 
