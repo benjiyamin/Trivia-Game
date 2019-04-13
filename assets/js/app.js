@@ -22,7 +22,7 @@ function Game(questionBank) {
   this.currentQuestion = undefined
   this.results = []
 
-  this.startGame = function (questionCount = 10, timePerQuestion = 10) {
+  this.startGame = function (questionCount = 10, timePerQuestion = 5) {
     if (questionCount <= questionBank.length) {
       this.questionCount = questionCount
       this.timePerQuestion = timePerQuestion

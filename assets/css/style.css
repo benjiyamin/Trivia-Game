@@ -16,9 +16,17 @@
     background-color: #ababdd;
 }
 
+.result {
+    margin-bottom: 1rem;
+}
+
 .bg-space {
     background-color: #202020;
-    /*background: #202020 url("../images/background-poster.png") no-repeat center top;*/
+    background: #202020 url("../images/bg-titan.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 #gauntletWrapper {
@@ -37,4 +45,14 @@
 .result-alert {
     margin-bottom: 0;
     padding: 0 1.25rem;
+}
+
+.start-btn {
+    color: #ababdd;
+    border-color: #ababdd;
+}
+
+.start-btn:not(:disabled):not(.disabled).active, .start-btn:not(:disabled):not(.disabled):active, .show>.start-btn.dropdown-toggle, .start-btn:hover {
+    background-color: #ababdd;
+    border-color: #ababdd;
 }

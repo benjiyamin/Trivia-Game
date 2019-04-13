@@ -88,18 +88,20 @@ function Controller(model, view) {
         }
         if (answer === result.guess) {
           if (answer.isCorrect) {
-            answerDiv.addClass('alert-success')
+            //answerDiv.addClass('alert-success')
+            answerDiv.addClass('btn-success')
           } else {
             answerDiv
-              .addClass('alert-danger')
+              //.addClass('alert-danger')
+              .addClass('btn-danger')
               .append(' <i class="fas fa-times"></i>')
           }
         }
         answersDiv.append(answerDiv)
       });
       let resultDiv = $('<div>')
-        .append(questionP)
-        .append(answersDiv)
+        .addClass('result')
+        .append(questionP, answersDiv)
       $results.append(resultDiv)
     }
     $('#trivia').hide()
