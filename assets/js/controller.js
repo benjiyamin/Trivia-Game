@@ -9,19 +9,25 @@ function Controller(model, view) {
     )
     let $answers = $('#answers', view)
     $answers.empty()
+    var correctBtn
     model.currentQuestion.answers.forEach(answer => {
       let button = $('<button>')
         .addClass('btn btn-secondary btn-lg btn-block')
         .text(answer.text)
         .on('click', function () {
           $('#answers>.btn')
-            .addClass('disabled')
             .attr('disabled', true)
+            .each(function (i, btn) {
+              let $btn = $(btn)
+              if ($btn.is(correctBtn)) {
+                $btn.append(' <i class="fas fa-check"></i>')
+                return false // break loop
+              }
+            })
           button.removeClass('btn-secondary')
           if (answer.isCorrect) {
             button
               .addClass('btn-success')
-              .append(' <i class="fas fa-check"></i>')
           } else {
             button
               .addClass('btn-danger')
@@ -36,6 +42,9 @@ function Controller(model, view) {
           }
         })
       $answers.append(button)
+      if (answer.isCorrect) {
+        correctBtn = button
+      }
     });
   }
 
@@ -51,10 +60,17 @@ function Controller(model, view) {
     } else {
       $timeProgress.attr('class', 'progress-bar bg-danger')
     }
-    if (model.time <= 0) {
+    if (model.time <= 0) { // Ran out of time
       $('#answers>.btn')
-        .addClass('disabled btn-danger')
+        //.addClass('btn-danger')
         .attr('disabled', true)
+        .each(function (i, btn) {
+          let $btn = $(btn)
+          if ($btn.text() == model.correctAnswer(model.currentQuestion).text) {
+            $btn.append(' <i class="fas fa-check"></i>')
+            return false  // break loop
+          }
+        })
     }
   }
 
@@ -88,11 +104,9 @@ function Controller(model, view) {
         }
         if (answer === result.guess) {
           if (answer.isCorrect) {
-            //answerDiv.addClass('alert-success')
             answerDiv.addClass('btn-success')
           } else {
             answerDiv
-              //.addClass('alert-danger')
               .addClass('btn-danger')
               .append(' <i class="fas fa-times"></i>')
           }
@@ -157,7 +171,6 @@ function Controller(model, view) {
   this.endRound = function () {
     clearTimeout(this.inverval)
     this.inverval = setTimeout(this.nextRound.bind(this), 1000 * this.timeBetweenRounds) // Start the timer
-    //this.onTimeChange()
   }
 
   this.nextRound = function () {

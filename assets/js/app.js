@@ -67,6 +67,7 @@ function Game(questionBank) {
     return score
   }
 
+  /*
   this.unanswered = function() {
     let unanswered = 0
     this.results.forEach(result => {
@@ -80,6 +81,7 @@ function Game(questionBank) {
   this.incorrect = function () {
     return this.score() - this.unanswered()
   }
+  */
 
   this.correctAnswer = function (question) {
     for (let i = 0; i < question.answers.length; i++) {
